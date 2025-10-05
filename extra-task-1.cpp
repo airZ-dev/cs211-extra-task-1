@@ -111,7 +111,12 @@ double time_to_utc(int utc_offset, double time)
 	return 0;
 
 }
-
+/// <summary>
+/// Return UTC time in time zone utc_offset.
+/// </summary>
+/// <param name="utc_offset"></param>
+/// <param name="time"></param>
+/// <returns></returns>
 double time_from_utc(int utc_offset, double time)
 {
 	/*
@@ -141,7 +146,7 @@ double time_from_utc(int utc_offset, double time)
 		>>> time_from_utc(+1, 23.0)
 		0.0
 	*/
-	return 0;
+	return fmod(time + utc_offset + 24.0, 24.0);
 
 }
 
@@ -175,4 +180,14 @@ int main()
 	assert(get_hours(3800) == 1);
 	assert(get_minutes(3800) == 3);
 	assert(get_seconds(3800) == 20);
+
+	// Тесты для time_from_utc
+	assert(fabs(time_from_utc(0, 12.0) - 12.0) < DBL_EPSILON);
+	assert(fabs(time_from_utc(1, 12.0) - 13.0) < DBL_EPSILON);
+	assert(fabs(time_from_utc(-1, 12.0) - 11.0) < DBL_EPSILON);
+	assert(fabs(time_from_utc(6, 6.0) - 12.0) < DBL_EPSILON);
+	assert(fabs(time_from_utc(-7, 6.0) - 23.0) < DBL_EPSILON);
+	assert(fabs(time_from_utc(-1, 0.0) - 23.0) < DBL_EPSILON);
+	assert(fabs(time_from_utc(-1, 23.0) - 22.0) < DBL_EPSILON);
+	assert(fabs(time_from_utc(1, 23.0) - 0.0) < DBL_EPSILON);
 }
